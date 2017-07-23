@@ -34,6 +34,15 @@ html, body {
       padding: 40px;
       box-sizing: border-box;
       background-color: #FFF;
+
+      cursor: pointer;
+      transform-origin: 0 0;
+      transform-style: preserve-3d;
+      transition: transform .6s ease-in-out, left .6s ease-in-out, top .6s ease-in-out;
+      
+      &.is-inverse{
+        transform: translate(320px) rotateY(180deg);
+      }
     }
 
     figcaption {
@@ -43,6 +52,30 @@ html, body {
         margin-top: 20px;
         color: #A7A0A2;
       }
+
+      .img-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top:0;
+        left: 0;
+
+        padding: 50px 40px;
+        overflow: auto;
+
+        color:#a7a0a2;
+        font-size: 22px;
+        line-height: 1.25;
+        text-align: center;
+        background-color: #fff;
+
+        box-sizing: border-box;
+
+        /*先开始时.img-back，旋转了180度，因为translateZ(1px)，位于正面图像的下方*/
+        /*当.img-figure旋转时，.img-back又旋转了180度，旋转度数为360,因为translateZ(1px)，位于正面图像的上方*/
+        transform: rotateY(180deg) translateZ(1px);
+      }
+
     }
   }
 }
