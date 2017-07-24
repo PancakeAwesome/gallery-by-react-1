@@ -57,8 +57,8 @@ var ImgFigure = React.createClass({
 
     // 如果图片的旋转角度有值且不为0则添加旋转角度
     if (this.props.arrange.rotate) {
-      ['Moz', 'ms', 'Webkit', ''].forEach(function(value) {
-        styleObj[value + 'Transform'] = 'rotate(' + this.props.arrange.rotate + 'deg)';
+      ['MozTransform', 'msTransform', 'WebkitTransform', 'transform'].forEach(function(value) {
+        styleObj[value] = 'rotate(' + this.props.arrange.rotate + 'deg)';
       }.bind(this));
     }
 
@@ -84,10 +84,36 @@ var ImgFigure = React.createClass({
 });
 
 // 控制组件
-var controllerUnit = React.createClass({
+var ControllerUnit = React.createClass({
+
+  handleClick: function(e) {
+    // 如果点击的是当前正在选中态的按钮，则翻转图片，否则将对应的图片居中
+    if (this.props.arrange.isCenter) {
+      this.props.inverse();
+    } else {
+      this.props.center();
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+  },
+
   render: function() {
+
+    var controllerUnitClassName = 'controller-unit';
+
+    /* 如果对应的是居中的图片，显示控制按钮的居中态
+    如果同时对应的是翻转图片，显示控制按钮的翻转态 */
+    if (this.props.arrange.isCenter) {
+      controllerUnitClassName += ' is-center';
+
+      if(this.props.arrange.isInverse) {
+        controllerUnitClassName += ' is-inverse';
+      }
+    }
+
     return (
-      <span className="controller-unit"></span>
+      <span className={controllerUnitClassName} onClick={this.handleClick}></span>
     );
   }
 });
@@ -278,6 +304,12 @@ var AppComponent = React.createClass({
         arrange={this.state.imgsArrangeArr[index]}
         inverse={this.inverse(index)}
         center={this.center(index)} />);
+
+      controllerUnits.push(<ControllerUnit arrange={this.state.imgsArrangeArr[index]}
+        key={index}
+        inverse={this.inverse(index)}
+        center={this.center(index)} />);
+
     }.bind(this));
 
     return (
